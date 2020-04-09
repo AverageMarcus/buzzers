@@ -12,21 +12,15 @@
   </head>
   <body>
     <header>
-      <h1>Join {{room}}</h1>
+      <h1>{{room}}</h1>
     </header>
 
     <main>
-      <h2>Oh hi,</h2>
-
-      <p>Tell me your (team) name:</p>
-
-      <form>
-        <label>
-          Name
-          <input name="name" type="text" maxlength="100" required>
-        </label>
-        <button type="submit" id="submit-name">Submit</button>
-      </form>
+      <h2>Oh hi, {{name}}</h2>
+  
+      <button id="buzzer">
+        BUZZ
+      </button>
     </main>
   </body>
 </html>

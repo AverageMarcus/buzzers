@@ -1,7 +1,13 @@
 const express = require("express");
-var exphbs  = require('express-handlebars');
+const exphbs  = require('express-handlebars');
+const bodyParser = require('body-parser')
+
 const app = express();
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+})); 
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
@@ -12,7 +18,11 @@ app.get("/:roomId/join", (request, response) => {
 });
 
 app.post("/:roomId/join", (request, response) => {
-  response.render('room', {layout: false, room: request.params.roomId});
+  response.render('room', {
+    layout: false, 
+    room: request.params.roomId,
+    name: request.body.name
+  });
 });
 
 const listener = app.listen(process.env.PORT, () => {
