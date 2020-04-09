@@ -1,13 +1,23 @@
 const express = require("express");
 const exphbs  = require('express-handlebars');
 const bodyParser = require('body-parser')
+const Fingerprint = require('express-fingerprint')
 
 const app = express();
+
+app.use(Fingerprint({
+    parameters:[
+        Fingerprint.useragent,
+        Fingerprint.acceptHeaders,
+        Fingerprint.geoip
+    ]
+}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 })); 
+
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
