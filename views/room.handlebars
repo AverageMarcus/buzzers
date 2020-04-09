@@ -36,8 +36,8 @@
         }));
       };
 
-      socket.onmessage = function(msg) {
-        msg = JSON.parse(msg);
+      socket.onmessage = function(event) {
+        let msg = JSON.parse(event.data);
         if (msg.type === "buzz") {
           alert(`${msg.participant} buzzed`);
         }

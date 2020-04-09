@@ -16,6 +16,7 @@ function getOrCreateRoom(roomId) {
     room = {
       roomId: roomId,
       participants: [],
+      audience: [],
       characters: shuffle(chars)
     };
     rooms[roomId] = room;
@@ -41,6 +42,11 @@ function addParticipantWS(roomId, participantId, ws) {
   room.participants.find(p => p.participantId === participantId).ws = ws;
 }
 
+function addAudienceWS(roomId, ws) {
+  let room = getOrCreateRoom(roomId);
+  room.audience.push(ws);
+}
+
 function buzz(roomId, participant) {
   let room = getOrCreateRoom(roomId);
   room.participants.forEach(p => {
@@ -50,7 +56,13 @@ function buzz(roomId, participant) {
         participant: participant.participantName
       }));
     }
-  })
+  });
+  room.audience.forEach(ws => {
+    ws.send(JSON.stringify({
+      type: "buzz",
+      participant: participant
+    }));
+  });
 }
 
-module.exports = {getOrCreateRoom, addParticipant, addParticipantWS, buzz}
+module.exports = {getOrCreateRoom, addParticipant, addParticipantWS, addAudienceWS, buzz}

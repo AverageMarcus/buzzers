@@ -72,18 +72,26 @@ wss.on('connection', (ws, req) => {
   let participant;
   let roomId = req.url.substring(1);
   
-  ws.on('message', (message) => {
-    message = JSON.parse(message);
-    if (message.type === "join") {
-      participant = message.data;
-      rooms.addParticipantWS(roomId, participant.participantId, ws)
-      ws.send('Joined as ' + participant.participantName);
-    }
-    if (message.type === "buzz") {
-      console.log(`${participant.participantName} buzzed!`)
-      rooms.buzz(roomId, participant);
-    }
-  });
+  if (roomId.includes("/audience")) {
+    roomId = roomId.replace("/audience", "");
+    
+    rooms.addAudienceWS(roomId, ws);
+    
+  } else {
+    ws.on('message', (message) => {
+      message = JSON.parse(message);
+      if (message.type === "join") {
+        participant = message.data;
+        rooms.addParticipantWS(roomId, participant.participantId, ws)
+        ws.send('Joined as ' + participant.participantName);
+      }
+      if (message.type === "buzz") {
+        console.log(`${participant.participantName} buzzed!`)
+        rooms.buzz(roomId, participant);
+      }
+    });
+  }
+  
 
   ws.send('Connected');
 });

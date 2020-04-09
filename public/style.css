@@ -68,6 +68,10 @@ footer {
   text-shadow: 2px 2px 2px black;
 }
 
+#buzzer:active {
+  box-shadow: inset 4px 4px 4px rgba(0,0,0,.5);
+}
+
 h2 img {
   max-height: 40px;
 }
@@ -82,4 +86,8 @@ figure.participant img {
 figure.participant figcaption {
   font-weight: bold;
   font-size: 1.3em;
+}
+
+.buzzed {
+  background: limegreen;
 }
