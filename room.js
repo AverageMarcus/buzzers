@@ -54,7 +54,8 @@ function buzz(roomId, participant) {
     if (p.ws && p.participantId !== participant.participantId) {
       p.ws.send(JSON.stringify({
         type: "buzz",
-        participant: participant.participantName
+        participant: participant.participantName,
+        msg: `<img src="${participant.character}"> ${participant.participantName} buzzed!`
       }));
     }
   });

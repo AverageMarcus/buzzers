@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Buzzer</title>
+    <title>Buzzers</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="A cool thing made with Glitch">
@@ -23,6 +23,10 @@
       </button>
     </main>
     
+    <div id="messageBox">
+      
+    </div>
+    
     <script>
       let socket = new WebSocket(`wss://${window.location.hostname}/{{room}}`);
 
@@ -39,12 +43,8 @@
       socket.onmessage = function(event) {
         let msg = JSON.parse(event.data);
         if (msg.type === "buzz") {
-          alert(`${msg.participant} buzzed`);
+          showMessage(msg.msg);
         }
-      };
-
-      socket.onerror = function(error) {
-        alert(`[error] ${error.message}`);
       };
       
       document.getElementById('buzzer').addEventListener('touchstart', function() {
@@ -52,6 +52,15 @@
           type: "buzz" 
         }));
       });
+      
+      showMessage(msg) {
+        let mb = document.getElementById('messageBox');
+        mb.innerHTML = msg;
+        mb.classList.remove('hide');
+        setTimeout(() => {
+          mb.classList.add('hide');
+        }, 5000)
+      }
     </script>
   </body>
 </html>
