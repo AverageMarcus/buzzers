@@ -37,15 +37,17 @@
       };
 
       socket.onmessage = function(event) {
-        console.log(event.message);
+        console.log(event);
       };
 
       socket.onerror = function(error) {
         alert(`[error] ${error.message}`);
       };
       
-      document.getElementById('buzzer').addEventListener('mousedown', function() {
-        socket.send(JSON.stringify({ type: "buzz" }));
+      document.getElementById('buzzer').addEventListener('click', function() {
+        socket.send(JSON.stringify({ 
+          type: "buzz" 
+        }));
       });
     </script>
   </body>

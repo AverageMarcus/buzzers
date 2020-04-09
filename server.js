@@ -28,6 +28,10 @@ app.set('view engine', 'handlebars');
 
 app.use(express.static("public"));
 
+app.get("/", (request, response) => {
+  response.render('index', { layout: false });
+});
+
 app.get("/:roomId/join", (request, response) => {
   
   let room = rooms.getOrCreateRoom(request.params.roomId);
@@ -67,6 +71,7 @@ wss.on('connection', (ws, req) => {
     }
     if (message.type === "buzz") {
       // TODO: Handle Buzzer
+      console.log(`${participant.participantName} buzzed!`)
     }
   });
 
