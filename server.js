@@ -70,10 +70,13 @@ server.listen(process.env.PORT, () => {
 const wss = new WebSocket.Server({ server });
 wss.on('connection', (ws, req) => {
   let participant;
+  let roomId = req.url.substring(1);
+  
   ws.on('message', (message) => {
     message = JSON.parse(message);
     if (message.type === "join") {
       participant = message.data;
+      rooms.addParticipantWS(roomId, participant.participantId, ws)
       ws.send('Joined as ' + participant.participantName);
     }
     if (message.type === "buzz") {

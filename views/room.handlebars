@@ -24,7 +24,7 @@
     </main>
     
     <script>
-      let socket = new WebSocket(`wss://${window.location.hostname}`);
+      let socket = new WebSocket(`wss://${window.location.hostname}/{{room}}`);
 
       socket.onopen = function(e) {
         socket.send(JSON.stringify({

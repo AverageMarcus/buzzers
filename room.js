@@ -36,4 +36,9 @@ function addParticipant(roomId, participantId, participantName) {
   rooms[roomId] = room;
 }
 
-module.exports = {getOrCreateRoom, addParticipant}
+function addParticipantWS(roomId, participantId, ws) {
+  let room = getOrCreateRoom(roomId);
+  room.participants.find(p => p.participantId === participantId).ws = ws;
+}
+
+module.exports = {getOrCreateRoom, addParticipant, addParticipantWS}
