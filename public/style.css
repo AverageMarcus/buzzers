@@ -54,3 +54,11 @@ footer {
   padding-top: 1.5em;
   border-top: 1px solid lightgrey;
 }
+
+#buzzer {
+  width: 90vw;
+  height: 90vh;
+  margin: 0 auto;
+  border-radius: 100%;
+  background: red;
+}

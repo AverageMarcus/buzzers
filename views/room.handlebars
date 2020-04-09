@@ -24,25 +24,29 @@
     </main>
     
     <script>
-    let socket = new WebSocket(`wss://${window.location.hostname}`);
+      let socket = new WebSocket(`wss://${window.location.hostname}`);
 
-    socket.onopen = function(e) {
-      socket.send({
-        type: "join",
-        data: {
-          participantId: '{{participantId}}',
-          participantName: '{{participantName}}',
-        }
-      });
-    };
+      socket.onopen = function(e) {
+        socket.send(JSON.stringify({
+          type: "join",
+          data: {
+            participantId: '{{participantId}}',
+            participantName: '{{participantName}}',
+          }
+        }));
+      };
 
-    socket.onmessage = function(event) {
+      socket.onmessage = function(event) {
+        console.log(event.message);
+      };
+
+      socket.onerror = function(error) {
+        alert(`[error] ${error.message}`);
+      };
       
-    };
-
-    socket.onerror = function(error) {
-      alert(`[error] ${error.message}`);
-    };
+      document.getElementById('buzzer').addEventListener('mousedown', function() {
+        socket.send(JSON.stringify({ type: "buzz" }));
+      });
     </script>
   </body>
 </html>

@@ -58,12 +58,17 @@ server.listen(process.env.PORT, () => {
 
 const wss = new WebSocket.Server({ server });
 wss.on('connection', (ws, req) => {
-    ws.on('message', (message) => {
-      message = JSON.stringify(message);
-      console.log(message)
-      console.log(message.type)
-      console.log(message.data)
-    });
+  let participant;
+  ws.on('message', (message) => {
+    message = JSON.parse(message);
+    if (message.type === "join") {
+      participant = message.data;
+      ws.send('Joined as ' + participant.participantName);
+    }
+    if (message.type === "buzz") {
+      // TODO: Handle Buzzer
+    }
+  });
 
-    ws.send('Connected');
+  ws.send('Connected');
 });
