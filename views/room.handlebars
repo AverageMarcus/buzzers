@@ -27,11 +27,17 @@
     let socket = new WebSocket(`wss://${window.location.hostname}`);
 
     socket.onopen = function(e) {
-      socket.send("My name is John");
+      socket.send({
+        type: "join",
+        data: {
+          participantId: '{{participantId}}',
+          participantName: '{{participantName}}',
+        }
+      });
     };
 
     socket.onmessage = function(event) {
-      a
+      
     };
 
     socket.onerror = function(error) {

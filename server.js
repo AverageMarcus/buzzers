@@ -37,7 +37,9 @@ app.get("/:roomId/join", (request, response) => {
     response.render('room', {
       layout: false, 
       room: request.params.roomId,
-      name: participant.participantName
+      name: participant.participantName,
+      participantName: participant.participantName,
+      participantId: participant.participantId,
     });
   } else {
      response.render('join', {layout: false, room: request.params.roomId});
@@ -46,11 +48,7 @@ app.get("/:roomId/join", (request, response) => {
 
 app.post("/:roomId/join", (request, response) => {
   rooms.addParticipant(request.params.roomId, request.fingerprint.hash, request.body.name);
-  response.render('room', {
-    layout: false, 
-    room: request.params.roomId,
-    name: request.body.name
-  });
+  response.redirect(`/${request.params.roomId}/join`);
 });
 
 server.listen(process.env.PORT, () => {
@@ -59,9 +57,12 @@ server.listen(process.env.PORT, () => {
 
 
 const wss = new WebSocket.Server({ server });
-wss.on('connection', (ws) => {
+wss.on('connection', (ws, req) => {
     ws.on('message', (message) => {
-        console.log('received: %s', message);
+      message = JSON.stringify(message);
+      console.log(message)
+      console.log(message.type)
+      console.log(message.data)
     });
 
     ws.send('Connected');
