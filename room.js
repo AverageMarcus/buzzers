@@ -1,6 +1,14 @@
 const chars = require('./characters.json');
 const rooms = {};
 
+function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
 function getOrCreateRoom(roomId) {
   let room = rooms[roomId];
   
@@ -8,7 +16,7 @@ function getOrCreateRoom(roomId) {
     room = {
       roomId: roomId,
       participants: [],
-      characters: 
+      characters: shuffle(chars)
     };
     rooms[roomId] = room;
   }
@@ -22,6 +30,7 @@ function addParticipant(roomId, participantId, participantName) {
   room.participants.push({
     participantId, 
     participantName,
+    character: room.characters[room.participants.length]
   });
   
   rooms[roomId] = room;

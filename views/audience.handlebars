@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Buzzer</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A cool thing made with Glitch">
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/style.css">
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>{{room}}</h1>
+    </header>
+
+    <main>
+      <h2>Participants</h2>
+      
+      {{#each participants}}
+        <figure class="participant">
+          <img src="{{this.character}}" />
+          <figcaption>{{this.participantName}}</figcaption>
+        </figure>
+      {{/each}}
+    </main>
+  </body>
+</html>

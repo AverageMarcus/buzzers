@@ -67,3 +67,19 @@ footer {
   color: white;
   text-shadow: 2px 2px 2px black;
 }
+
+h2 img {
+  max-height: 40px;
+}
+
+figure.participant {
+  display: inline-block;
+}
+
+figure.participant img {
+  max-height: 150px;
+}
+figure.participant figcaption {
+  font-weight: bold;
+  font-size: 1.3em;
+}

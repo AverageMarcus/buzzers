@@ -44,10 +44,17 @@ app.get("/:roomId/join", (request, response) => {
       name: participant.participantName,
       participantName: participant.participantName,
       participantId: participant.participantId,
+      character: participant.character,
     });
   } else {
      response.render('join', {layout: false, room: request.params.roomId});
   }  
+});
+
+app.get("/:roomId/audience", (request, response) => {
+  let room = rooms.getOrCreateRoom(request.params.roomId);
+  
+  response.render('audience', {layout: false, room: request.params.roomId, participants: room.participants });
 });
 
 app.post("/:roomId/join", (request, response) => {
