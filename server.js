@@ -1,11 +1,14 @@
 const express = require("express");
 const exphbs  = require('express-handlebars');
-const bodyParser = require('body-parser')
-const Fingerprint = require('express-fingerprint')
+const bodyParser = require('body-parser');
+const Fingerprint = require('express-fingerprint');
+const WebSocket = require('ws');
+const http = require('http');
 
 const rooms = require('./room');
 
 const app = express();
+const server = http.createServer(app);
 
 app.use(Fingerprint({
     parameters:[
@@ -50,6 +53,16 @@ app.post("/:roomId/join", (request, response) => {
   });
 });
 
-const listener = app.listen(process.env.PORT, () => {
-  console.log("Your app is listening on port " + listener.address().port);
+server.listen(process.env.PORT, () => {
+    console.log("Your app is listening on port " + server.address().port);
+});
+
+
+const wss = new WebSocket.Server({ server });
+wss.on('connection', (ws) => {
+    ws.on('message', (message) => {
+        console.log('received: %s', message);
+    });
+
+    ws.send('Connected');
 });

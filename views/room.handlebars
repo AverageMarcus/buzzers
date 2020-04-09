@@ -22,5 +22,21 @@
         BUZZ
       </button>
     </main>
+    
+    <script>
+    let socket = new WebSocket(`wss://${window.location.hostname}`);
+
+    socket.onopen = function(e) {
+      socket.send("My name is John");
+    };
+
+    socket.onmessage = function(event) {
+      a
+    };
+
+    socket.onerror = function(error) {
+      alert(`[error] ${error.message}`);
+    };
+    </script>
   </body>
 </html>

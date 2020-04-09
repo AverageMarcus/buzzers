@@ -26,3 +26,4 @@ function addParticipant(roomId, participantId, participantName) {
   rooms[roomId] = room;
 }
 
+module.exports = {getOrCreateRoom, addParticipant}
