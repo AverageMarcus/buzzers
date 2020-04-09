@@ -23,7 +23,7 @@
       </button>
     </main>
     
-    <div id="messageBox">
+    <div id="messageBox" class="hide">
       
     </div>
     
@@ -53,7 +53,7 @@
         }));
       });
       
-      showMessage(msg) {
+      function showMessage(msg) {
         let mb = document.getElementById('messageBox');
         mb.innerHTML = msg;
         mb.classList.remove('hide');

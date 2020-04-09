@@ -115,3 +115,22 @@ figure.participant figcaption {
     transform: scale(1.3) rotate(30deg);
   }
 }
+
+#messageBox {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height:100px;
+  background: #bbbbf2;
+  border: 3px solid black;
+}
+
+#messageBox img {
+  max-height: 90%;
+}
+
+.hide {
+  display: none;
+}

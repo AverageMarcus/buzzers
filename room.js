@@ -50,6 +50,8 @@ function addAudienceWS(roomId, ws) {
 
 function buzz(roomId, participant) {
   let room = getOrCreateRoom(roomId);
+  participant = room.participants.find(p => p.participantId === participant.participantId);
+  
   room.participants.forEach(p => {
     if (p.ws && p.participantId !== participant.participantId) {
       p.ws.send(JSON.stringify({
