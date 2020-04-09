@@ -18,12 +18,14 @@
     <main>
       <h2>Participants</h2>
       
-      {{#each participants}}
-        <figure class="participant" id="p-{{this.participantId}}">
-          <img src="{{this.character}}" />
-          <figcaption>{{this.participantName}}</figcaption>
-        </figure>
-      {{/each}}
+      <div>
+        {{#each participants}}
+          <figure class="participant" id="p-{{this.participantId}}">
+            <img src="{{this.character}}" />
+            <figcaption>{{this.participantName}}</figcaption>
+          </figure>
+        {{/each}}
+      </div>
     </main>
     
     
