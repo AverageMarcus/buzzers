@@ -1,4 +1,4 @@
-
+const chars = require('./characters.json');
 const rooms = {};
 
 function getOrCreateRoom(roomId) {
@@ -7,7 +7,8 @@ function getOrCreateRoom(roomId) {
   if (!room) {
     room = {
       roomId: roomId,
-      participants: []
+      participants: [],
+      characters: 
     };
     rooms[roomId] = room;
   }
