@@ -68,10 +68,16 @@ footer {
   font-size: 4em;
   color: white;
   text-shadow: 2px 2px 2px black;
+  outline: none;
 }
 
 #buzzer:active {
   box-shadow: inset 4px 4px 4px rgba(0,0,0,.5);
+}
+
+#buzzer:disabled {
+  filter: grayscale(50%);
+  opacity: .5;
 }
 
 h2 img {
@@ -125,12 +131,17 @@ figure.participant figcaption {
   height:100px;
   background: #bbbbf2;
   border: 3px solid black;
+  font-size: 1.3em;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 #messageBox img {
-  max-height: 90%;
+  max-height: 50%;
 }
 
-.hide {
+#messageBox.hide {
   display: none;
 }

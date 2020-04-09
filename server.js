@@ -83,7 +83,6 @@ wss.on('connection', (ws, req) => {
       if (message.type === "join") {
         participant = message.data;
         rooms.addParticipantWS(roomId, participant.participantId, ws)
-        ws.send('Joined as ' + participant.participantName);
       }
       if (message.type === "buzz") {
         console.log(`${participant.participantName} buzzed!`)
@@ -91,7 +90,4 @@ wss.on('connection', (ws, req) => {
       }
     });
   }
-  
-
-  ws.send('Connected');
 });

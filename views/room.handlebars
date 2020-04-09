@@ -53,11 +53,19 @@
         }));
       });
       
+      document.getElementById('buzzer').addEventListener('mousedown', function() {
+        socket.send(JSON.stringify({ 
+          type: "buzz" 
+        }));
+      });
+      
       function showMessage(msg) {
+        document.getElementById('buzzer').disabled = true;
         let mb = document.getElementById('messageBox');
         mb.innerHTML = msg;
         mb.classList.remove('hide');
         setTimeout(() => {
+          document.getElementById('buzzer').disabled = false;
           mb.classList.add('hide');
         }, 5000)
       }

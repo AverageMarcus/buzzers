@@ -57,7 +57,7 @@ function buzz(roomId, participant) {
       p.ws.send(JSON.stringify({
         type: "buzz",
         participant: participant.participantName,
-        msg: `<img src="${participant.character}"> ${participant.participantName} buzzed!`
+        msg: `<img src="${participant.character}"><div>${participant.participantName} buzzed!</div>`
       }));
     }
   });
