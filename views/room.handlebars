@@ -47,7 +47,7 @@
         alert(`[error] ${error.message}`);
       };
       
-      document.getElementById('buzzer').addEventListener('click', function() {
+      document.getElementById('buzzer').addEventListener('touchstart', function() {
         socket.send(JSON.stringify({ 
           type: "buzz" 
         }));

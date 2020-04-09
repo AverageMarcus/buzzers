@@ -56,8 +56,8 @@ footer {
 }
 
 #buzzer {
-  width: 500px;
-  height: 500px;
+  width: 95vw;
+  height: 95vw;
   margin: 0 auto;
   border-radius: 500px;
   background: red;
@@ -78,6 +78,7 @@ h2 img {
 
 figure.participant {
   display: inline-block;
+  transition: ease-in all .2s;
 }
 
 figure.participant img {
@@ -89,5 +90,6 @@ figure.participant figcaption {
 }
 
 .buzzed {
-  background: limegreen;
+  background: yellow;
+  transform: scale(1.3);
 }
