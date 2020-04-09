@@ -80,8 +80,8 @@ wss.on('connection', (ws, req) => {
       ws.send('Joined as ' + participant.participantName);
     }
     if (message.type === "buzz") {
-      // TODO: Handle Buzzer
       console.log(`${participant.participantName} buzzed!`)
+      rooms.buzz(roomId, participant);
     }
   });
 

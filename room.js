@@ -41,4 +41,16 @@ function addParticipantWS(roomId, participantId, ws) {
   room.participants.find(p => p.participantId === participantId).ws = ws;
 }
 
-module.exports = {getOrCreateRoom, addParticipant, addParticipantWS}
+function buzz(roomId, participant) {
+  let room = getOrCreateRoom(roomId);
+  room.participants.forEach(p => {
+    if (p.ws) {
+      p.ws.send(JSON.stringify({
+        type: "buzz",
+        participant: participant.participantName
+      }));
+    }
+  })
+}
+
+module.exports = {getOrCreateRoom, addParticipant, addParticipantWS, buzz}
