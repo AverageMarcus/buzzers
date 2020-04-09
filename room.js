@@ -1,7 +1,7 @@
 
 const rooms = {};
 
-export function getOrCreateRoom(roomId) {
+function getOrCreateRoom(roomId) {
   let room = rooms[roomId];
   
   if (!room) {
@@ -15,7 +15,14 @@ export function getOrCreateRoom(roomId) {
   return room;
 }
 
-
-export addParticipant(roomId, participantId, participantName) {
+function addParticipant(roomId, participantId, participantName) {
+  let room = getOrCreateRoom(roomId);
   
+  room.participants.push({
+    participantId, 
+    participantName,
+  });
+  
+  rooms[roomId] = room;
 }
+
