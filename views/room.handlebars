@@ -48,12 +48,14 @@
       };
       
       document.getElementById('buzzer').addEventListener('touchstart', function() {
+        beep();
         socket.send(JSON.stringify({ 
           type: "buzz" 
         }));
       });
       
       document.getElementById('buzzer').addEventListener('mousedown', function() {
+        beep();
         socket.send(JSON.stringify({ 
           type: "buzz" 
         }));
@@ -68,6 +70,10 @@
           document.getElementById('buzzer').disabled = false;
           mb.classList.add('hide');
         }, 5000)
+      }
+      
+      function beep() {
+        new Audio("https://cdn.glitch.com/81aebabf-079d-4504-b844-d90d643962c4%2FGame-show-buzzer-sound-effect.mp3?v=1586451448374").play();
       }
     </script>
   </body>

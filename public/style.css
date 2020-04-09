@@ -68,7 +68,6 @@ footer {
   font-size: 4em;
   color: white;
   text-shadow: 2px 2px 2px black;
-  outline: none;
 }
 
 #buzzer:active {
