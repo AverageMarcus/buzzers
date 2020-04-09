@@ -36,6 +36,8 @@
           let buzzed = document.getElementById(`p-${msg.participant.participantId}`);
           buzzed.classList.add('buzzed');
           setTimeout(() => buzzed.classList.remove('buzzed'), 5000)
+        } else if (msg.type === "new_participant") {
+          window.location = window.location;
         }
       };
 

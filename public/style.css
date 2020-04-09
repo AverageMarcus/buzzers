@@ -58,6 +58,8 @@ footer {
 #buzzer {
   width: 95vw;
   height: 95vw;
+  max-height: 500px;
+  max-width: 500px;
   margin: 0 auto;
   border-radius: 500px;
   background: red;
@@ -82,7 +84,7 @@ figure.participant {
 }
 
 figure.participant img {
-  max-height: 150px;
+  max-height: 100px;
 }
 figure.participant figcaption {
   font-weight: bold;
@@ -91,5 +93,25 @@ figure.participant figcaption {
 
 .buzzed {
   background: yellow;
-  transform: scale(1.3);
+  animation: shake 1s cubic-bezier(.36,.07,.19,.97) both;
+  transform: scale(1) rotate(0);
+  backface-visibility: hidden;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: rscale(1.3) otate(-10deg);
+  }
+  
+  20%, 80% {
+    transform: rscale(1.3) otate(20deg);
+  }
+
+  30%, 50%, 70% {
+    transform: scale(1.3) rotate(-30deg);
+  }
+
+  40%, 60% {
+    transform: scale(1.3) rotate(30deg);
+  }
 }

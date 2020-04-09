@@ -40,6 +40,7 @@ function addParticipant(roomId, participantId, participantName) {
 function addParticipantWS(roomId, participantId, ws) {
   let room = getOrCreateRoom(roomId);
   room.participants.find(p => p.participantId === participantId).ws = ws;
+  room.audience.forEach(ws => ws.send(JSON.stringify({type: "new_participant"})));
 }
 
 function addAudienceWS(roomId, ws) {
