@@ -62,6 +62,7 @@
       });
       
       function showMessage(msg) {
+        window.navigator.vibrate(500);
         document.getElementById('buzzer').disabled = true;
         let mb = document.getElementById('messageBox');
         mb.innerHTML = msg;
@@ -73,6 +74,7 @@
       }
       
       function beep() {
+        window.navigator.vibrate(500);
         new Audio("https://cdn.glitch.com/81aebabf-079d-4504-b844-d90d643962c4%2FGame-show-buzzer-sound-effect.mp3?v=1586451448374").play();
       }
     </script>

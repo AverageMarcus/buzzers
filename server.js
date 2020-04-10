@@ -76,7 +76,6 @@ wss.on('connection', (ws, req) => {
     roomId = roomId.replace("/audience", "");
     
     rooms.addAudienceWS(roomId, ws);
-    
   } else {
     ws.on('message', (message) => {
       message = JSON.parse(message);
@@ -88,6 +87,11 @@ wss.on('connection', (ws, req) => {
         console.log(`${participant.participantName} buzzed!`)
         rooms.buzz(roomId, participant);
       }
+    });
+    
+    
+    ws.on('close', () => {
+      rooms.removeParticipant(roomId, participant.participantId);
     });
   }
 });

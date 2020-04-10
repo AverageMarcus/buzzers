@@ -37,6 +37,12 @@ function addParticipant(roomId, participantId, participantName) {
   rooms[roomId] = room;
 }
 
+function removeParticipant(roomId, participantId) {
+  let room = getOrCreateRoom(roomId);
+  room.participants = room.participants.filter(p => p.participantId !== participantId);
+  room.audience.forEach(ws => ws.send(JSON.stringify({type: "new_participant"})));
+}
+
 function addParticipantWS(roomId, participantId, ws) {
   let room = getOrCreateRoom(roomId);
   room.participants.find(p => p.participantId === participantId).ws = ws;
@@ -69,4 +75,4 @@ function buzz(roomId, participant) {
   });
 }
 
-module.exports = {getOrCreateRoom, addParticipant, addParticipantWS, addAudienceWS, buzz}
+module.exports = {getOrCreateRoom, addParticipant, addParticipantWS, addAudienceWS, buzz, removeParticipant}

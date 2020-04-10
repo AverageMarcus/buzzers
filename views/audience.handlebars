@@ -35,6 +35,7 @@
       socket.onmessage = function(event) {
         let msg = JSON.parse(event.data);
         if (msg.type === "buzz") {
+          beep();
           let buzzed = document.getElementById(`p-${msg.participant.participantId}`);
           buzzed.classList.add('buzzed');
           setTimeout(() => buzzed.classList.remove('buzzed'), 5000)
@@ -42,10 +43,11 @@
           window.location = window.location;
         }
       };
-
-      socket.onerror = function(error) {
-        alert(`[error] ${error.message}`);
-      };
+      
+      function beep() {
+        window.navigator.vibrate(500);
+        new Audio("https://cdn.glitch.com/81aebabf-079d-4504-b844-d90d643962c4%2FGame-show-buzzer-sound-effect.mp3?v=1586451448374").play();
+      }
     </script>
   </body>
 </html>
