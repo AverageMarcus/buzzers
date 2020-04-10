@@ -11,11 +11,7 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(Fingerprint({
-    parameters:[
-        Fingerprint.useragent,
-        Fingerprint.acceptHeaders,
-        Fingerprint.geoip
-    ]
+  parameters: [Fingerprint.useragent, Fingerprint.acceptHeaders, Fingerprint.geoip]
 }));
 
 app.use(bodyParser.json());
@@ -33,7 +29,6 @@ app.get("/", (request, response) => {
 });
 
 app.get("/:roomId/join", (request, response) => {
-  
   let room = rooms.getOrCreateRoom(request.params.roomId);
   let participant = room.participants.find(p => p.participantId === request.fingerprint.hash);
   
@@ -47,13 +42,12 @@ app.get("/:roomId/join", (request, response) => {
       character: participant.character,
     });
   } else {
-     response.render('join', {layout: false, room: request.params.roomId});
+    response.render('join', {layout: false, room: request.params.roomId});
   }  
 });
 
 app.get("/:roomId/audience", (request, response) => {
   let room = rooms.getOrCreateRoom(request.params.roomId);
-  
   response.render('audience', {layout: false, room: request.params.roomId, participants: room.participants });
 });
 
@@ -63,20 +57,19 @@ app.post("/:roomId/join", (request, response) => {
 });
 
 server.listen(process.env.PORT, () => {
-    console.log("Your app is listening on port " + server.address().port);
+  console.log("Your app is listening on port " + server.address().port);
 });
 
-
 const wss = new WebSocket.Server({ server });
+
 wss.on('connection', (ws, req) => {
-  let participant;
   let roomId = req.url.substring(1);
   
   if (roomId.includes("/audience")) {
     roomId = roomId.replace("/audience", "");
-    
     rooms.addAudienceWS(roomId, ws);
   } else {
+    let participant;
     ws.on('message', (message) => {
       message = JSON.parse(message);
       if (message.type === "join") {
@@ -89,9 +82,10 @@ wss.on('connection', (ws, req) => {
       }
     });
     
-    
     ws.on('close', () => {
-      rooms.removeParticipant(roomId, participant.participantId);
+      if (participant) {
+        rooms.removeParticipant(roomId, participant.participantId); 
+      }
     });
   }
 });
