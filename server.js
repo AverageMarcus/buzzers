@@ -26,7 +26,10 @@ app.set('view engine', 'handlebars');
 app.use(express.static("public"));
 
 app.get("/", (request, response) => {
-  response.render('index', { layout: false });
+  response.render('index', { 
+    layout: false,
+    suggestedTitle: randomWords({exactly: 1, wordsPerString: 3, separator: '-', maxLength: 5})
+  });
 });
 
 app.get("/:roomId/join", (request, response) => {
