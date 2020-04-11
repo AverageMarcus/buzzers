@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const Fingerprint = require('express-fingerprint');
 const WebSocket = require('ws');
 const http = require('http');
+const randomWords = require('random-words');
 
 const rooms = require('./room');
 
@@ -29,31 +30,31 @@ app.get("/", (request, response) => {
 });
 
 app.get("/:roomId/join", (request, response) => {
-  let room = rooms.getOrCreateRoom(request.params.roomId);
+  let room = rooms.getOrCreateRoom(request.params.roomId.toLowerCase());
   let participant = room.participants.find(p => p.participantId === request.fingerprint.hash);
   
   if (participant) {
     response.render('room', {
       layout: false, 
-      room: request.params.roomId,
+      room: request.params.roomId.toLowerCase(),
       name: participant.participantName,
       participantName: participant.participantName,
       participantId: participant.participantId,
       character: participant.character,
     });
   } else {
-    response.render('join', {layout: false, room: request.params.roomId});
+    response.render('join', {layout: false, room: request.params.roomId.toLowerCase()});
   }  
 });
 
 app.get("/:roomId/audience", (request, response) => {
-  let room = rooms.getOrCreateRoom(request.params.roomId);
-  response.render('audience', {layout: false, room: request.params.roomId, participants: room.participants });
+  let room = rooms.getOrCreateRoom(request.params.roomId.toLowerCase());
+  response.render('audience', {layout: false, room: request.params.roomId.toLowerCase(), participants: room.participants });
 });
 
 app.post("/:roomId/join", (request, response) => {
-  rooms.addParticipant(request.params.roomId, request.fingerprint.hash, request.body.name);
-  response.redirect(`/${request.params.roomId}/join`);
+  rooms.addParticipant(request.params.roomId.toLowerCase(), request.fingerprint.hash, request.body.name);
+  response.redirect(`/${request.params.roomId.toLowerCase()}/join`);
 });
 
 server.listen(process.env.PORT, () => {
@@ -63,7 +64,7 @@ server.listen(process.env.PORT, () => {
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws, req) => {
-  let roomId = req.url.substring(1);
+  let roomId = req.url.substring(1).toLowerCase();
   
   if (roomId.includes("/audience")) {
     roomId = roomId.replace("/audience", "");

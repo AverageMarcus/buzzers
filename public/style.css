@@ -24,6 +24,10 @@ form {
   margin: 0 auto;
 }
 
+input[type=text] {
+  text-transform: lowercase;
+}
+
 input {
   border: 1px solid silver;
   display: block;
