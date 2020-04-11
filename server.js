@@ -16,9 +16,7 @@ app.use(Fingerprint({
 }));
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-})); 
+app.use(bodyParser.urlencoded({ extended: true })); 
 
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
