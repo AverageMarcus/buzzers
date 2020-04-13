@@ -16,14 +16,7 @@
     <main>
       <h2>Participants</h2>
       
-      <div>
-        {{#each participants}}
-          <figure class="participant" id="p-{{this.participantId}}">
-            <img src="{{this.character}}" />
-            <figcaption>{{this.participantName}}</figcaption>
-          </figure>
-        {{/each}}
-      </div>
+      <div id="participants"></div>
     </main>
     
     
@@ -37,8 +30,18 @@
           let buzzed = document.getElementById(`p-${msg.participant.participantId}`);
           buzzed.classList.add('buzzed');
           setTimeout(() => buzzed.classList.remove('buzzed'), 5000)
-        } else if (msg.type === "new_participant") {
-          window.location = window.location;
+        } else if (msg.type === "participants") {
+          let participantContainer = document.getElementById('participants');
+          let contents = '';
+          msg.participants.forEach(p => {
+            contents += `
+              <figure class="participant ${!p.active ? 'hide': ''}" id="p-${p.participantId}">
+                <img src="${p.character}" />
+                <figcaption>${p.participantName}</figcaption>
+              </figure>
+            `;
+          });
+          participantContainer.innerHTML = contents;
         }
       };
       

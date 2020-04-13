@@ -34,6 +34,9 @@ app.get("/:roomId/join", (request, response) => {
   let room = rooms.getOrCreateRoom(request.params.roomId.toLowerCase());
   let participant = room.participants.find(p => p.participantId === request.fingerprint.hash);
   
+  console.log(request.fingerprint.hash);
+  console.log(participant);
+  
   if (participant) {
     response.render('room', {
       layout: false, 

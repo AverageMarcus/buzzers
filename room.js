@@ -32,7 +32,8 @@ function addParticipant(roomId, participantId, participantName) {
   room.participants.push({
     participantId, 
     participantName,
-    character: room.characters[room.participants.length]
+    character: room.characters[room.participants.length],
+    active: true
   });
   
   rooms[roomId] = room;
@@ -40,19 +41,33 @@ function addParticipant(roomId, participantId, participantName) {
 
 function removeParticipant(roomId, participantId) {
   let room = getOrCreateRoom(roomId);
-  room.participants = room.participants.filter(p => p.participantId !== participantId);
-  room.audience.forEach(ws => ws.send(JSON.stringify({type: "new_participant"})));
+  room.participants.find(p => p.participantId === participantId).active = false;
+  room.audience.forEach(ws => {
+    ws.send(JSON.stringify({
+      type: "participants",
+      participants: room.participants
+    }));
+  });
 }
 
 function addParticipantWS(roomId, participantId, ws) {
   let room = getOrCreateRoom(roomId);
   room.participants.find(p => p.participantId === participantId).ws = ws;
-  room.audience.forEach(ws => ws.send(JSON.stringify({type: "new_participant"})));
+  room.audience.forEach(ws => {
+    ws.send(JSON.stringify({
+      type: "participants",
+      participants: room.participants
+    }));
+  });
 }
 
 function addAudienceWS(roomId, ws) {
   let room = getOrCreateRoom(roomId);
   room.audience.push(ws);
+  ws.send(JSON.stringify({
+    type: "participants",
+    participants: room.participants
+  }));
 }
 
 function buzz(roomId, participant) {
