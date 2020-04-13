@@ -16,7 +16,7 @@ app.use(Fingerprint({
 }));
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
@@ -24,7 +24,7 @@ app.set('view engine', 'handlebars');
 app.use(express.static("public"));
 
 app.get("/", (request, response) => {
-  response.render('index', { 
+  response.render('index', {
     layout: false,
     suggestedTitle: randomWords({exactly: 1, wordsPerString: 3, separator: '-', maxLength: 5})
   });
@@ -33,13 +33,10 @@ app.get("/", (request, response) => {
 app.get("/:roomId/join", (request, response) => {
   let room = rooms.getOrCreateRoom(request.params.roomId.toLowerCase());
   let participant = room.participants.find(p => p.participantId === request.fingerprint.hash);
-  
-  console.log(request.fingerprint.hash);
-  console.log(participant);
-  
+
   if (participant) {
     response.render('room', {
-      layout: false, 
+      layout: false,
       room: request.params.roomId.toLowerCase(),
       name: participant.participantName,
       participantName: participant.participantName,
@@ -48,7 +45,7 @@ app.get("/:roomId/join", (request, response) => {
     });
   } else {
     response.render('join', {layout: false, room: request.params.roomId.toLowerCase()});
-  }  
+  }
 });
 
 app.get("/:roomId/audience", (request, response) => {
@@ -69,7 +66,7 @@ const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws, req) => {
   let roomId = req.url.substring(1).toLowerCase();
-  
+
   if (roomId.includes("/audience")) {
     roomId = roomId.replace("/audience", "");
     rooms.addAudienceWS(roomId, ws);
@@ -86,10 +83,10 @@ wss.on('connection', (ws, req) => {
         rooms.buzz(roomId, participant);
       }
     });
-    
+
     ws.on('close', () => {
       if (participant) {
-        rooms.removeParticipant(roomId, participant.participantId); 
+        rooms.removeParticipant(roomId, participant.participantId);
       }
     });
   }
