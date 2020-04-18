@@ -5,22 +5,17 @@ const Fingerprint = require('express-fingerprint');
 const WebSocket = require('ws');
 const http = require('http');
 const randomWords = require('random-words');
-
 const rooms = require('./room');
 
 const app = express();
 const server = http.createServer(app);
 
-app.use(Fingerprint({
-  parameters: [Fingerprint.useragent, Fingerprint.acceptHeaders, Fingerprint.geoip]
-}));
-
+app.use(Fingerprint({ parameters: [Fingerprint.useragent, Fingerprint.acceptHeaders, Fingerprint.geoip] }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
-
 app.use(express.static("public"));
 
 app.get("/", (request, response) => {
