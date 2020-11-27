@@ -6,6 +6,7 @@ const WebSocket = require('ws');
 const http = require('http');
 const randomWords = require('random-words');
 const rooms = require('./room');
+const room = require("./room");
 
 const app = express();
 const server = http.createServer(app);
@@ -25,32 +26,33 @@ app.get("/", (request, response) => {
   });
 });
 
-app.get("/:roomId/join", (request, response) => {
-  let room = rooms.getOrCreateRoom(request.params.roomId.toLowerCase());
+app.get("/:roomId", (request, response) => {
+  let room = rooms.getOrCreateRoom(request.params.roomId.trim().toLowerCase());
   let participant = room.participants.find(p => p.participantId === request.fingerprint.hash);
 
-  if (participant) {
+  if (room.audience.length === 0) {
+    response.render('audience', {
+      layout: false,
+      room: request.params.roomId.trim().toLowerCase(),
+      participants: room.participants,
+    });
+  } else if (participant) {
     response.render('room', {
       layout: false,
-      room: request.params.roomId.toLowerCase(),
+      room: request.params.roomId.trim().toLowerCase(),
       name: participant.participantName,
       participantName: participant.participantName,
       participantId: participant.participantId,
       character: participant.character,
     });
   } else {
-    response.render('join', {layout: false, room: request.params.roomId.toLowerCase()});
+    response.render('join', {layout: false, room: request.params.roomId.trim().toLowerCase()});
   }
 });
 
-app.get("/:roomId/audience", (request, response) => {
-  let room = rooms.getOrCreateRoom(request.params.roomId.toLowerCase());
-  response.render('audience', {layout: false, room: request.params.roomId.toLowerCase(), participants: room.participants });
-});
-
-app.post("/:roomId/join", (request, response) => {
+app.post("/:roomId", (request, response) => {
   rooms.addParticipant(request.params.roomId.toLowerCase(), request.fingerprint.hash, request.body.name);
-  response.redirect(`/${request.params.roomId.toLowerCase()}/join`);
+  response.redirect(`/${request.params.roomId.toLowerCase()}`);
 });
 
 server.listen(process.env.PORT, () => {
@@ -65,6 +67,17 @@ wss.on('connection', (ws, req) => {
   if (roomId.includes("/audience")) {
     roomId = roomId.replace("/audience", "");
     rooms.addAudienceWS(roomId, ws);
+
+    ws.on('message', (message) => {
+      message = JSON.parse(message);
+      if (message.type === "reset") {
+        rooms.reset(roomId);
+      }
+    });
+
+    ws.on('close', () => {
+      room.closeRoom(roomId);
+    });
   } else {
     let participant;
     ws.on('message', (message) => {

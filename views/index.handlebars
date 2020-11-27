@@ -14,12 +14,8 @@
     </header>
 
     <main>
-      <h2>Oh hi!</h2>
+      <h2>Create or join a room</h2>
 
-      <p>
-        Create or join a room
-      </p>
-      
       <form>
         <label>
           Room ID
@@ -28,13 +24,12 @@
         <button type="submit" id="submit-name">Submit</button>
       </form>
     </main>
-    
+
     <script>
     document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
       let roomId = document.getElementById('roomId').value;
-      window.location = `//${window.location.host}/${roomId}/join`;
-      
+      window.location = `//${window.location.host}/${roomId}`;
     });
     </script>
   </body>

@@ -14,19 +14,20 @@
     </header>
 
     <main>
-      <h2>Oh hi, {{name}} <img src="{{character}}"/></h2>
-  
+      <h2>{{name}} <img src="{{character}}"/></h2>
+
       <button id="buzzer">
         BUZZ
       </button>
     </main>
-    
+
     <div id="messageBox" class="hide">
-      
+
     </div>
-    
+
     <script>
-      let socket = new WebSocket(`wss://${window.location.hostname}/{{room}}`);
+      let proto = location.protocol == 'http:' ? 'ws' : 'wss'
+      let socket = new WebSocket(`${proto}://${window.location.hostname}:${window.location.port}/{{room}}`);
 
       socket.onopen = function(e) {
         socket.send(JSON.stringify({
@@ -42,35 +43,51 @@
         let msg = JSON.parse(event.data);
         if (msg.type === "buzz") {
           showMessage(msg.msg);
+        } else if (msg.type === "reset") {
+          reset();
+        } else if (msg.type === "close") {
+          roomClosed();
         }
       };
-      
+
       document.getElementById('buzzer').addEventListener('touchstart', function() {
         beep();
-        socket.send(JSON.stringify({ 
-          type: "buzz" 
+        socket.send(JSON.stringify({
+          type: "buzz"
         }));
+        document.getElementById('buzzer').classList.add('active');
       });
-      
+
       document.getElementById('buzzer').addEventListener('mousedown', function() {
         beep();
-        socket.send(JSON.stringify({ 
-          type: "buzz" 
+        socket.send(JSON.stringify({
+          type: "buzz"
         }));
+        document.getElementById('buzzer').classList.add('active');
       });
-      
+
       function showMessage(msg) {
         window.navigator.vibrate(500);
         document.getElementById('buzzer').disabled = true;
         let mb = document.getElementById('messageBox');
         mb.innerHTML = msg;
         mb.classList.remove('hide');
-        setTimeout(() => {
-          document.getElementById('buzzer').disabled = false;
-          mb.classList.add('hide');
-        }, 5000)
       }
-      
+
+      function reset() {
+        document.getElementById('buzzer').disabled = false;
+        document.getElementById('buzzer').classList.remove('active');
+        let mb = document.getElementById('messageBox');
+        mb.classList.add('hide');
+      }
+
+      function roomClosed() {
+        document.getElementById('buzzer').disabled = true;
+        let mb = document.getElementById('messageBox');
+        mb.innerHTML = "Room closed";
+        mb.classList.remove('hide');
+      }
+
       function beep() {
         window.navigator.vibrate(500);
       }

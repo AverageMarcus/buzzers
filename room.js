@@ -11,7 +11,7 @@ function shuffle(a) {
 
 function getOrCreateRoom(roomId) {
   let room = rooms[roomId];
-  
+
   if (!room) {
     room = {
       roomId: roomId,
@@ -22,43 +22,49 @@ function getOrCreateRoom(roomId) {
     };
     rooms[roomId] = room;
   }
-  
+
   return room;
 }
 
 function addParticipant(roomId, participantId, participantName) {
   let room = getOrCreateRoom(roomId);
-  
+
   room.participants.push({
-    participantId, 
+    participantId,
     participantName,
     character: room.characters[room.participants.length],
     active: true
   });
-  
+
   rooms[roomId] = room;
 }
 
 function removeParticipant(roomId, participantId) {
   let room = getOrCreateRoom(roomId);
-  room.participants.find(p => p.participantId === participantId).active = false;
-  room.audience.forEach(ws => {
-    ws.send(JSON.stringify({
-      type: "participants",
-      participants: room.participants
-    }));
-  });
+  let participant = room.participants.find(p => p.participantId === participantId);
+  if (participant) {
+    participant.active = false;
+    room.audience.forEach(ws => {
+      ws.send(JSON.stringify({
+        type: "participants",
+        participants: room.participants
+      }));
+    });
+  }
 }
 
 function addParticipantWS(roomId, participantId, ws) {
   let room = getOrCreateRoom(roomId);
-  room.participants.find(p => p.participantId === participantId).ws = ws;
-  room.audience.forEach(ws => {
-    ws.send(JSON.stringify({
-      type: "participants",
-      participants: room.participants
-    }));
-  });
+  let participant = room.participants.find(p => p.participantId === participantId);
+  if (participant) {
+    participant.ws = ws;
+    room.audience.forEach(ws => {
+      ws.send(JSON.stringify({
+        type: "participants",
+        participants: room.participants
+      }));
+    });
+  }
 }
 
 function addAudienceWS(roomId, ws) {
@@ -74,26 +80,53 @@ function buzz(roomId, participant) {
   let room = getOrCreateRoom(roomId);
   if (room.canBuzz) {
     room.canBuzz = false;
-    setTimeout(() => room.canBuzz = true, 5000);
-    
+
     participant = room.participants.find(p => p.participantId === participant.participantId);
 
-    room.participants.forEach(p => {
-      if (p.ws && p.participantId !== participant.participantId) {
-        p.ws.send(JSON.stringify({
+    if (participant) {
+      room.participants.forEach(p => {
+        if (p.ws && p.participantId !== participant.participantId) {
+          p.ws.send(JSON.stringify({
+            type: "buzz",
+            participant: participant.participantName,
+            msg: `<img src="${participant.character}"><div>${participant.participantName} buzzed!</div>`
+          }));
+        }
+      });
+      room.audience.forEach(ws => {
+        ws.send(JSON.stringify({
           type: "buzz",
-          participant: participant.participantName,
-          msg: `<img src="${participant.character}"><div>${participant.participantName} buzzed!</div>`
+          participant: participant
         }));
-      }
-    });
-    room.audience.forEach(ws => {
-      ws.send(JSON.stringify({
-        type: "buzz",
-        participant: participant
-      }));
-    }); 
+      });
+    }
   }
 }
 
-module.exports = {getOrCreateRoom, addParticipant, addParticipantWS, addAudienceWS, buzz, removeParticipant}
+function reset(roomId) {
+  let room = getOrCreateRoom(roomId);
+  room.canBuzz = true;
+
+  room.participants.forEach(p => {
+    p.ws.send(JSON.stringify({
+      type: "reset"
+    }));
+  });
+}
+
+function closeRoom(roomId) {
+  let room = getOrCreateRoom(roomId);
+  room.canBuzz = false;
+
+  room.participants.forEach(p => {
+    if (p.ws) {
+      p.ws.send(JSON.stringify({
+        type: "close"
+      }));
+    }
+  });
+
+  delete rooms[roomId];
+}
+
+module.exports = {getOrCreateRoom, addParticipant, addParticipantWS, addAudienceWS, buzz, removeParticipant, reset, closeRoom}

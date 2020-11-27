@@ -14,22 +14,32 @@
     </header>
 
     <main>
+      <p>
+        Share this link for players to join:<br>
+        <a id="playerRoom" href=""></a>
+      </p>
+
+      <button id="resetBuzzers">Reset</button>
+
       <h2>Participants</h2>
-      
+
       <div id="participants"></div>
     </main>
-    
-    
+
     <script>
-      let socket = new WebSocket(`wss://${window.location.hostname}/{{room}}/audience`);
+      document.getElementById("playerRoom").href = window.location;
+      document.getElementById("playerRoom").innerText = window.location;
+
+      let proto = location.protocol == 'http:' ? 'ws' : 'wss'
+      let socket = new WebSocket(`${proto}://${window.location.hostname}:${window.location.port}/{{room}}/audience`);
+      let buzzed;
 
       socket.onmessage = function(event) {
         let msg = JSON.parse(event.data);
         if (msg.type === "buzz") {
           beep();
-          let buzzed = document.getElementById(`p-${msg.participant.participantId}`);
+          buzzed = document.getElementById(`p-${msg.participant.participantId}`);
           buzzed.classList.add('buzzed');
-          setTimeout(() => buzzed.classList.remove('buzzed'), 5000)
         } else if (msg.type === "participants") {
           let participantContainer = document.getElementById('participants');
           let contents = '';
@@ -44,10 +54,17 @@
           participantContainer.innerHTML = contents;
         }
       };
-      
+
       function beep() {
         window.navigator.vibrate(500);
       }
+
+      document.getElementById('resetBuzzers').addEventListener('click', function() {
+        socket.send(JSON.stringify({
+          type: "reset"
+        }));
+        buzzed.classList.remove('buzzed');
+      })
     </script>
   </body>
 </html>
