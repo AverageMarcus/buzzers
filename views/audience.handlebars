@@ -51,6 +51,11 @@
                 <figure class="participant ${!p.active ? 'hide': ''}" id="p-${p.participantId}">
                   <img src="${p.character}" />
                   <figcaption>${p.participantName}</figcaption>
+                  <div>
+                    <button onclick="updateScore('${p.participantId}', -1)">-1</button>
+                    <div class="score">${p.score || 0}</div>
+                    <button onclick="updateScore('${p.participantId}', 1)">+1</button>
+                  </div>
                 </figure>
               `;
             });
@@ -61,6 +66,14 @@
 
       function beep() {
         window.navigator.vibrate(500);
+      }
+
+      function updateScore(participantId, points) {
+        socket.send(JSON.stringify({
+          type: "point",
+          participantId,
+          points,
+        }));
       }
 
       document.getElementById('resetBuzzers').addEventListener('click', function() {

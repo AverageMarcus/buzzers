@@ -129,4 +129,32 @@ function closeRoom(roomId) {
   delete rooms[roomId];
 }
 
-module.exports = {getOrCreateRoom, addParticipant, addParticipantWS, addAudienceWS, buzz, removeParticipant, reset, closeRoom}
+function updateScore(roomId, participantId, points) {
+  let room = getOrCreateRoom(roomId);
+  let participant = room.participants.find(p => p.participantId === participantId);
+  if (participant) {
+    if (!participant.score) participant.score = 0;
+
+    participant.score += points;
+
+    participant.ws.send(JSON.stringify({
+      type: "score",
+      score: participant.score,
+    }));
+  }
+
+  room.audience.forEach(ws => {
+    ws.send(JSON.stringify({
+      type: "participants",
+      participants: room.participants.map(p => { return {
+        participantId: p.participantId,
+        character: p.character,
+        participantName: p.participantName,
+        score: p.score,
+        active: p.active,
+      }})
+    }));
+  });
+}
+
+module.exports = {getOrCreateRoom, addParticipant, addParticipantWS, addAudienceWS, buzz, removeParticipant, reset, closeRoom, updateScore}

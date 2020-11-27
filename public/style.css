@@ -179,3 +179,21 @@ figure.participant figcaption {
 #participants {
   margin-top: 1em;
 }
+
+.score {
+  display: inline-block;
+  background: green;
+  border-radius: 100px;
+  color: white;
+  padding: 4px 9px;
+  vertical-align: top;
+}
+
+
+.participant button {
+  display: none;
+}
+
+.participant.buzzed button {
+  display: inline;
+}

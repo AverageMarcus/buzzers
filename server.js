@@ -72,6 +72,8 @@ wss.on('connection', (ws, req) => {
       message = JSON.parse(message);
       if (message.type === "reset") {
         rooms.reset(roomId);
+      } else if (message.type === "point") {
+        rooms.updateScore(roomId, message.participantId, message.points);
       }
     });
 
