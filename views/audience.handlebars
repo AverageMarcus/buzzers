@@ -14,16 +14,18 @@
     </header>
 
     <main>
-      <p>
+      <blockquote>
         Share this link for players to join:<br>
         <a id="playerRoom" href=""></a>
-      </p>
-
-      <button id="resetBuzzers">Reset</button>
+      </blockquote>
 
       <h2>Participants</h2>
 
-      <div id="participants"></div>
+      <button id="resetBuzzers">Reset Buzzers</button>
+
+      <div id="participants">
+        No participants yet :(
+      </div>
     </main>
 
     <script>
@@ -42,16 +44,18 @@
           buzzed.classList.add('buzzed');
         } else if (msg.type === "participants") {
           let participantContainer = document.getElementById('participants');
-          let contents = '';
-          msg.participants.forEach(p => {
-            contents += `
-              <figure class="participant ${!p.active ? 'hide': ''}" id="p-${p.participantId}">
-                <img src="${p.character}" />
-                <figcaption>${p.participantName}</figcaption>
-              </figure>
-            `;
-          });
-          participantContainer.innerHTML = contents;
+          if (msg.participants.length) {
+            let contents = '';
+            msg.participants.forEach(p => {
+              contents += `
+                <figure class="participant ${!p.active ? 'hide': ''}" id="p-${p.participantId}">
+                  <img src="${p.character}" />
+                  <figcaption>${p.participantName}</figcaption>
+                </figure>
+              `;
+            });
+            participantContainer.innerHTML = contents;
+          }
         }
       };
 

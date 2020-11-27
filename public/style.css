@@ -10,7 +10,6 @@ body {
 }
 
 h1 {
-  font-style: italic;
   color: #373fff;
   line-height: 1.1;
 }
@@ -22,6 +21,8 @@ form {
   padding: 1em;
   max-width: 40ch;
   margin: 0 auto;
+  box-shadow: grey 1px 1px 3px;
+  border-radius: .25em;
 }
 
 label {
@@ -30,6 +31,7 @@ label {
 
 input[type=text] {
   text-transform: lowercase;
+  border-radius: .25em;
 }
 
 input {
@@ -42,7 +44,7 @@ input {
   width: 100%;
 }
 
-form button {
+button {
   background-color: #bbbbf2;
   border: 2px solid currentColor;
   border-radius: .25em;
@@ -60,6 +62,20 @@ footer {
   margin-top: 3em;
   padding-top: 1.5em;
   border-top: 1px solid lightgrey;
+}
+
+blockquote {
+  background-color: #eee;
+  display: block;
+  margin: 1em auto;
+  padding: 1em;
+  max-width: 40ch;
+  box-shadow: grey 1px 1px 3px;
+  border-radius: .25em;
+}
+
+blockquote a {
+  color: #373fff;
 }
 
 #buzzer {
@@ -158,4 +174,8 @@ figure.participant figcaption {
 
 #messageBox.hide {
   display: none;
+}
+
+#participants {
+  margin-top: 1em;
 }
