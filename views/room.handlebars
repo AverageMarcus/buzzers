@@ -26,8 +26,8 @@
     </div>
 
     <script>
-      let proto = location.protocol == 'http:' ? 'ws' : 'wss'
-      let socket = new WebSocket(`${proto}://${window.location.hostname}:${window.location.port}/{{room}}`);
+      var proto = location.protocol == 'http:' ? 'ws' : 'wss'
+      var socket = new WebSocket(proto + '://' + window.location.hostname + ':' + window.location.port + '/{{room}}');
 
       socket.onopen = function(e) {
         socket.send(JSON.stringify({
@@ -40,7 +40,7 @@
       };
 
       socket.onmessage = function(event) {
-        let msg = JSON.parse(event.data);
+        var msg = JSON.parse(event.data);
         if (msg.type === "buzz") {
           showMessage(msg.msg);
         } else if (msg.type === "reset") {
@@ -71,7 +71,7 @@
       function showMessage(msg) {
         window.navigator.vibrate(500);
         document.getElementById('buzzer').disabled = true;
-        let mb = document.getElementById('messageBox');
+        var mb = document.getElementById('messageBox');
         mb.innerHTML = msg;
         mb.classList.remove('hide');
       }
@@ -79,13 +79,13 @@
       function reset() {
         document.getElementById('buzzer').disabled = false;
         document.getElementById('buzzer').classList.remove('active');
-        let mb = document.getElementById('messageBox');
+        var mb = document.getElementById('messageBox');
         mb.classList.add('hide');
       }
 
       function roomClosed() {
         document.getElementById('buzzer').disabled = true;
-        let mb = document.getElementById('messageBox');
+        var mb = document.getElementById('messageBox');
         mb.innerHTML = "Room closed";
         mb.classList.remove('hide');
       }

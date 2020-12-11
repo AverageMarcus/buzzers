@@ -29,8 +29,7 @@
     <script>
     document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
-      let roomId = document.getElementById('roomId').value;
-      window.location = `//${window.location.host}/${roomId}`;
+      window.location = '//' + window.location.host + '/' + document.getElementById('roomId').value;
     });
     </script>
   </body>
