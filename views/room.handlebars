@@ -69,7 +69,7 @@
       });
 
       function showMessage(msg) {
-        window.navigator.vibrate(500);
+        if (window.navigator.vibrate) window.navigator.vibrate(500);
         document.getElementById('buzzer').disabled = true;
         var mb = document.getElementById('messageBox');
         mb.innerHTML = msg;
@@ -91,7 +91,7 @@
       }
 
       function beep() {
-        window.navigator.vibrate(500);
+        if (window.navigator.vibrate) window.navigator.vibrate(500);
       }
     </script>
   </body>

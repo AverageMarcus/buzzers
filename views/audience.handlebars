@@ -65,7 +65,7 @@
       };
 
       function beep() {
-        window.navigator.vibrate(500);
+        if (window.navigator.vibrate) window.navigator.vibrate(500);
       }
 
       function updateScore(participantId, points) {
