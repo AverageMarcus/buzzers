@@ -108,9 +108,11 @@ function reset(roomId) {
   room.canBuzz = true;
 
   room.participants.forEach(p => {
-    p.ws.send(JSON.stringify({
-      type: "reset"
-    }));
+    if (p.ws) {
+      p.ws.send(JSON.stringify({
+        type: "reset"
+      }));
+    }
   });
 }
 
@@ -137,10 +139,12 @@ function updateScore(roomId, participantId, points) {
 
     participant.score += points;
 
-    participant.ws.send(JSON.stringify({
-      type: "score",
-      score: participant.score,
-    }));
+    if (participant.ws) {
+      participant.ws.send(JSON.stringify({
+        type: "score",
+        score: participant.score,
+      }));
+    }
   }
 
   room.audience.forEach(ws => {
